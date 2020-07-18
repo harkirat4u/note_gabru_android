@@ -1,15 +1,13 @@
 package com.example.note_gabru_android;
 
-
-public class ListViewAdaptor extends ArrayAdapter {
-
-
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
 import java.util.List;
+
+public class ListViewAdaptor extends ArrayAdapter {
 
     Context mContext;
     int layoutRes;
