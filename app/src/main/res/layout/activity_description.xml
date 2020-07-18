@@ -59,7 +59,7 @@
             android:layout_marginLeft="160dp"
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_btn_speak_now" />
+            android:src="@drawable/ic_mic_black_24dp" />
 
         <ImageButton
             android:id="@+id/btn_stop_record"
@@ -68,7 +68,7 @@
             android:layout_marginLeft="160dp"
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
-            android:src="@android:drawable/alert_dark_frame"
+            android:src="@drawable/ic_stop_black_24dp"
             android:visibility="gone" />
 
         <ImageButton
@@ -78,7 +78,7 @@
             android:layout_marginLeft="160dp"
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_media_play"
+            android:src="@drawable/ic_play_arrow_black_24dp"
             android:visibility="gone" />
 
         <ImageButton
@@ -88,7 +88,7 @@
             android:layout_marginLeft="160dp"
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_menu_rotate"
+            android:src="@drawable/ic_replay_black_24dp"
             android:visibility="gone" />
 
 
@@ -104,12 +104,4 @@
         android:text="Save"
         android:textColor="#fff"
         android:textStyle="bold" />
-
-
-
-
-
-
-
-
 </RelativeLayout>
