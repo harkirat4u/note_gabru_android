@@ -15,8 +15,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/AppTheme"
+       >
         <activity android:name=".MapActivity"></activity>
         <activity android:name=".DescriptionActivity" />
         <activity android:name=".NotesActivity" />
@@ -32,16 +32,15 @@
             </intent-filter>
         </activity>
 
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyChoBVrChqJb_JWqCUsaebIWA0as3iQkJA" />
-
-    <provider
-        android:authorities="com.delaroystudios.imagecamerabitmap"
-        android:name=".ImageProvider"
-        android:exported="false"/>
 
 
-</application>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB45lwuNXNnXYsc3WHA1QyJKIkxqE-Rb7A" />
+
+
+
+
+    </application>
 
 </manifest>

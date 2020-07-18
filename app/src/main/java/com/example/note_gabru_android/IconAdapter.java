@@ -1,7 +1,5 @@
 package com.example.note_gabru_android;
 
-package com.example.myapplication;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;

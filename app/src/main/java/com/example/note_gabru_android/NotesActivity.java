@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -23,8 +24,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class NotesActivity extends AppCompatActivity {
-    GridView gridView;
+    ListView lView;
     FloatingActionButton floatingActionButton;
     DataBaseHelper dataBaseHelper;
     String audioPath;
@@ -38,7 +40,7 @@ public class NotesActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Notes");
-     gridView = findViewById(R.id.gridView);
+        lView = findViewById(R.id.lView);
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
 
@@ -50,7 +52,7 @@ public class NotesActivity extends AppCompatActivity {
         loadNotes();
 
         final IconAdapter iconAdapter = new IconAdapter(this, CategoryModel.listNotes);
-        gridView.setAdapter(iconAdapter);
+          lView.setAdapter(iconAdapter);
 
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +82,12 @@ public class NotesActivity extends AppCompatActivity {
                         }
 
                         IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,filterList);
-                        gridView.setAdapter(iconAdapter1);
+                          lView.setAdapter(iconAdapter1);
                     }
 
                     if(newText.isEmpty()){
                         IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
-                        gridView.setAdapter(iconAdapter1);
+                          lView.setAdapter(iconAdapter1);
                     }
 
 
@@ -95,7 +97,7 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -113,7 +115,7 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+          lView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
@@ -129,7 +131,7 @@ public class NotesActivity extends AppCompatActivity {
                             Toast.makeText(NotesActivity.this, "deleted", Toast.LENGTH_SHORT).show();
                             loadNotes();
                              IconAdapter iconAdapter = new IconAdapter(NotesActivity.this, CategoryModel.listNotes);
-                            gridView.setAdapter(iconAdapter);
+                              lView.setAdapter(iconAdapter);
                         }else {
                             Toast.makeText(NotesActivity.this, "not deleted", Toast.LENGTH_SHORT).show();
                         }
@@ -166,12 +168,12 @@ public class NotesActivity extends AppCompatActivity {
             case R.id.action_date:
                 loadsortedNotes(DataBaseHelper.COLUMN_DATE);
                 IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
-                gridView.setAdapter(iconAdapter1);
+                lView.setAdapter(iconAdapter1);
                 break;
             case R.id.action_title:
                 loadsortedNotes(DataBaseHelper.COLUMN_TITLE);
                 IconAdapter iconAdapter = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
-                gridView.setAdapter(iconAdapter);
+                lView.setAdapter(iconAdapter);
 
                 break;
         }
