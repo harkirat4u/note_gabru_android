@@ -22,17 +22,16 @@
         android:gravity="center_horizontal" />
 
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginRight="160dp"
+        android:layout_marginRight="150dp"
         android:background="@color/colorAccent"
         android:clickable="true"
         android:focusable="true"
-       />/ android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="@color/colorAccent" />
 
 

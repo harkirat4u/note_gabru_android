@@ -13,18 +13,18 @@
 
     <TextView
         android:id="@+id/tv_date"
-        android:layout_width="246dp"
-        android:layout_height="29dp"
+        android:layout_width="231dp"
+        android:layout_height="27dp"
         android:layout_margin="5dp"
         android:textSize="10dp" />
 
     <ImageView
         android:id="@+id/image_note"
-        android:layout_width="100dp"
+        android:layout_width="108dp"
         android:layout_height="100dp"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="-100dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="290dp"
         android:scaleType="fitXY" />
 
 
