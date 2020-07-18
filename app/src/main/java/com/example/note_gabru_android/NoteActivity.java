@@ -95,3 +95,92 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                System.out.println("grid view click");
+                CategoryModel cnote;
+
+                cnote = CategoryModel.listNotes.get(position);
+
+                audioPath = CategoryModel.listNotes.get(position).getAudio();
+                Intent intent = new Intent(NotesActivity.this, DescriptionActivity.class);
+                intent.putExtra("audio",audioPath);
+                intent.putExtra("selected",true);
+                intent.putExtra("note",cnote);
+                startActivity(intent);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(NotesActivity.this);
+                builder.setTitle("DELETE");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        ccid = CategoryModel.listNotes.get(position).getId();
+                        if(dataBaseHelper.deletenote(ccid)){
+                            Toast.makeText(NotesActivity.this, "deleted", Toast.LENGTH_SHORT).show();
+                            loadNotes();
+                             IconAdapter iconAdapter = new IconAdapter(NotesActivity.this, CategoryModel.listNotes);
+                            gridView.setAdapter(iconAdapter);
+                        }else {
+                            Toast.makeText(NotesActivity.this, "not deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                return true;
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.sort,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_date:
+                loadsortedNotes(DataBaseHelper.COLUMN_DATE);
+                IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
+                gridView.setAdapter(iconAdapter1);
+                break;
+            case R.id.action_title:
+                loadsortedNotes(DataBaseHelper.COLUMN_TITLE);
+                IconAdapter iconAdapter = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
+                gridView.setAdapter(iconAdapter);
+
+                break;
+        }
+        return true;
+    }
+
+    private void loadNotes(){
+        Cursor cursor = dataBaseHelper.getAllNotes();
+        CategoryModel.listNotes.clear();
+
+
+
