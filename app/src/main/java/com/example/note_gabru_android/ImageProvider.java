@@ -40,7 +40,6 @@ public class ImageProvider extends ContentProvider {
         mDatabase = new DataBaseHelper(getContext());
         return false;
     }
-
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
