@@ -38,4 +38,60 @@ public class NotesActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Notes");
-    }
+     gridView = findViewById(R.id.gridView);
+
+        floatingActionButton = findViewById(R.id.floatingActionButton);
+
+        dataBaseHelper = new DataBaseHelper(this);
+        searchView = findViewById(R.id.searchView);
+
+        filterList = new ArrayList<>();
+
+        loadNotes();
+
+        final IconAdapter iconAdapter = new IconAdapter(this, CategoryModel.listNotes);
+        gridView.setAdapter(iconAdapter);
+
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NotesActivity.this,DescriptionActivity.class);
+                startActivity(intent);
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(!newText.isEmpty()) {
+
+                    if(!newText.isEmpty()){
+                        filterList.clear();
+                        for(int i = 0;i < CategoryModel.listNotes.size();i++){
+                            CategoryModel categoryModelnote =  CategoryModel.listNotes.get(i);
+                            if(categoryModelnote.title.contains(newText)){
+                               filterList.add(categoryModelnote);
+                            }
+                        }
+
+                        IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,filterList);
+                        gridView.setAdapter(iconAdapter1);
+                    }
+
+                    if(newText.isEmpty()){
+                        IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
+                        gridView.setAdapter(iconAdapter1);
+                    }
+
+
+
+                }
+                return false;
+            }
+        });
+
