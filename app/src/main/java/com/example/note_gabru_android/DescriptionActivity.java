@@ -170,8 +170,6 @@ public class DescriptionActivity extends AppCompatActivity {
                 playRec.setVisibility(View.GONE);
 
             }
-
-
             if (mCurrentPhotoPath != null) {
                 try {
                     mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
