@@ -184,3 +184,71 @@ public class DescriptionActivity extends AppCompatActivity {
 
 
         }
+        
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                titleName = editTextTitle.getText().toString();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, CAMERA_REQUEST);
+
+                    } else {
+                        openCamera();
+                    }
+                } else {
+                    openCamera();
+                }
+            }
+        });
+
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat();
+                String joiningDate = sdf.format(calendar.getTime());
+
+                String cname = MainActivity.categoryName.get(MainActivity.catPosition);
+                String ntitle = editTextTitle.getText().toString().trim();
+                String ndesc = editTextDesc.getText().toString().trim();
+
+                titleName = ntitle;
+
+                if (ntitle.isEmpty() && ndesc.isEmpty()) {
+                    Toast.makeText(DescriptionActivity.this, "Fill the required feilds", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                if (selected) {
+                    if (dataBaseHelper.updateNote(nid, ntitle, ndesc, audiofilepath, mCurrentPhotoPath)) {
+                        Toast.makeText(DescriptionActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DescriptionActivity.this, "Not Updated", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                if (!selected) {
+                    if (dataBaseHelper.addNote(cname, ntitle, ndesc, joiningDate, noteLocation.getLatitude(), noteLocation.getLongitude(), audiofilepath, mCurrentPhotoPath)) {
+                        Toast.makeText(DescriptionActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DescriptionActivity.this, "Not saved", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+                Intent intent = new Intent(DescriptionActivity.this, NotesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+
+            }
+        });
+
