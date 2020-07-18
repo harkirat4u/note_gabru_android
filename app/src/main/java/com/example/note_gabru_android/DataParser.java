@@ -113,3 +113,28 @@ public class DataParser {
         return getPaths(jsonArray);
     }
 
+    public String getPath(JSONObject googlePathJson) {
+        String polyLine = "";
+        try {
+            polyLine = googlePathJson.getJSONObject("polyline").getString("points");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return polyLine;
+    }
+
+    public String[] getPaths(JSONArray googleStepsJson) {
+        int count = googleStepsJson.length();
+        String[] polylines = new String[count];
+
+        for (int i=0; i<count; i++) {
+            try {
+                polylines[i] = getPath(googleStepsJson.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return polylines;
+    }
+}
+
