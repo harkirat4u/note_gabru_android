@@ -70,7 +70,7 @@ public class NotesActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!newText.isEmpty()) {
+              
 
                     if(!newText.isEmpty()){
                         filterList.clear();
@@ -88,10 +88,7 @@ public class NotesActivity extends AppCompatActivity {
                     if(newText.isEmpty()){
                         IconAdapter iconAdapter1 = new IconAdapter(NotesActivity.this,CategoryModel.listNotes);
                           lView.setAdapter(iconAdapter1);
-                    }
-
-
-
+                    
                 }
                 return false;
             }
