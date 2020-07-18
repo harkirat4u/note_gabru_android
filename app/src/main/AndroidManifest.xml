@@ -37,7 +37,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB45lwuNXNnXYsc3WHA1QyJKIkxqE-Rb7A" />
-
+   <provider
+            android:authorities="com.delaroystudios.imagecamerabitmap"
+            android:name=".ImageProvider"
+            android:exported="false"/>
 
 
 
