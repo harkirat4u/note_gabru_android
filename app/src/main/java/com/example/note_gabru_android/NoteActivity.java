@@ -183,4 +183,48 @@ public class NotesActivity extends AppCompatActivity {
         CategoryModel.listNotes.clear();
 
 
+        if(cursor.moveToFirst()){
+            do{
+
+                CategoryModel.listNotes.add(new CategoryModel(cursor.getInt(0),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getDouble(5),cursor.getDouble(6),cursor.getString(7),cursor.getString(8)));
+                System.out.println(cursor.getInt(0));
+                System.out.println(cursor.getString(1));
+                System.out.println(cursor.getString(2));
+                System.out.println(cursor.getString(3));
+                System.out.println(cursor.getString(4));
+                System.out.println(cursor.getString(5));
+                System.out.println(cursor.getString(6));
+
+            }while (cursor.moveToNext());
+            cursor.close();
+        }
+    }
+
+    private void loadsortedNotes(String sort){
+        Cursor cursor = dataBaseHelper.getAllSortedNotes(sort);
+        CategoryModel.listNotes.clear();
+
+
+
+        if(cursor.moveToFirst()){
+            do{
+
+                CategoryModel.listNotes.add(new CategoryModel(cursor.getInt(0),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getDouble(5),cursor.getDouble(6),cursor.getString(7),cursor.getString(8)));
+                System.out.println(cursor.getInt(0));
+                System.out.println(cursor.getString(1));
+                System.out.println(cursor.getString(2));
+                System.out.println(cursor.getString(3));
+                System.out.println(cursor.getString(4));
+                System.out.println(cursor.getString(5));
+                System.out.println(cursor.getString(6));
+
+            }while (cursor.moveToNext());
+            cursor.close();
+        }
+    }
+
+
+
+
+}
 
