@@ -99,3 +99,88 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        locationRequest.setSmallestDisplacement(10);
         setHomeMarker();
     }
+    
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        Intent intent = getIntent();
+
+
+        dest_lat = intent.getDoubleExtra("latitude", 0);
+        dest_lng = intent.getDoubleExtra("longitude", 0);
+
+        LatLng noteLatLng = new LatLng(dest_lat, dest_lng);
+        MarkerOptions options = new MarkerOptions().position(noteLatLng).title("your saved loaction")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        ;
+        mMap.addMarker(options);
+
+    }
+
+    private void setMarker(Location location) {
+        LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions options = new MarkerOptions().position(userLatLng)
+                .title("Your Destination")
+                .snippet("You are going there")
+                .draggable(true);
+        destMarker = mMap.addMarker(options);
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+
+    private String getDirectionUrl() {
+        StringBuilder googleDirectionUrl = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+        googleDirectionUrl.append("origin=" + latitude + "," + longitude);
+        googleDirectionUrl.append("&destination=" + dest_lat + "," + dest_lng);
+        googleDirectionUrl.append("&key=" + getString(R.string.api_key_places));
+        Log.d("", "getDirectionUrl: " + googleDirectionUrl);
+        return googleDirectionUrl.toString();
+    }
+
+    private String getUrl(double latitude, double longitude, String nearbyPlace) {
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location=" + latitude + "," + longitude);
+        googlePlaceUrl.append("&radius=" + RADIUS);
+        googlePlaceUrl.append("&type=" + nearbyPlace);
+        googlePlaceUrl.append("&key=" + getString(R.string.api_key_places));
+        Log.d("", "getUrl: " + googlePlaceUrl);
+        return googlePlaceUrl.toString();
+
+    }
+
+
+    private void setHomeMarker() {
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    latitude = userLocation.latitude;
+                    longitude = userLocation.longitude;
+                    if (homeMarker != null)
+                        homeMarker.remove();
+//                    mMap.clear(); //clear the old markers
+                    CameraPosition cameraPosition = CameraPosition.builder()
+                            .target(new LatLng(userLocation.latitude, userLocation.longitude))
+                            .zoom(10)
+                            .bearing(0)
+                            .tilt(45)
+                            .build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    homeMarker = mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location")
+                            .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.icon_loc)));
+
+                }
+            }
+        };
+    }
