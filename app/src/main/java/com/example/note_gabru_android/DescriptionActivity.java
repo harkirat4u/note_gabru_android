@@ -2,6 +2,7 @@ package com.example.note_gabru_android;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,7 +21,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,6 +107,18 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+
+        findViewById(R.id.relativeLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                return false;
+            }
+
+
+
+        });
 
 
         final EditText editTextTitle = findViewById(R.id.title_edit_text);
@@ -586,6 +601,13 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
         }
 
     }
+    //Keyboard hide
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
 //Reset image
     public void imgReset(){  try {
 
