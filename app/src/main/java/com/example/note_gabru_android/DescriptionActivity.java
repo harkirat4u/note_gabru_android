@@ -6,11 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
+import android.net.Uri;import android.view.MenuItem;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,12 +20,12 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,14 +45,17 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DescriptionActivity extends AppCompatActivity {
-    ImageButton imageButton;
+public class DescriptionActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener  {
+
+    ImageButton popupButton;
     ImageView imageView;
     Uri imageUri;
     ImageButton startRec;
@@ -62,36 +66,28 @@ public class DescriptionActivity extends AppCompatActivity {
     double latitude, longitude;
 
     private static final int REQUEST_CODE = 1;
-
-
+    private static int RESULT_LOAD_IMAGE = 1;
+    private static int RESULT_Reset_IMAGE = 3;
     public static final int CAMERA_REQUEST = 1000;
-    public static final int MY_CAMERA_PERMISSION_CODE = 1001;
     DataBaseHelper dataBaseHelper;
-
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
-
     Location noteLocation;
     String titleName;
     int nid;
-
     String audiofilepath;
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
     boolean selected;
-
     EditText editTextTitle;
     EditText editTextDesc;
-
     CategoryModel selectednote;
-
     final int REQUEST_PERMISSION_CODE = 1000;
-
     String RECORDED_FILE;
 
-
+//on start
     @Override
     protected void onStart() {
         super.onStart();
@@ -102,10 +98,13 @@ public class DescriptionActivity extends AppCompatActivity {
             getLastLocation();
     }
 
-    @Override
+
+//onCreate
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+
 
         final EditText editTextTitle = findViewById(R.id.title_edit_text);
         final EditText editTextDesc = findViewById(R.id.description_edit_text);
@@ -113,14 +112,22 @@ public class DescriptionActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Detail");
         //image capture
-
-        imageButton = findViewById(R.id.chooseimagebtn);
+        popupButton = findViewById(R.id.popup);
         imageView = findViewById(R.id.image_view);
         startRec = findViewById(R.id.btn_start_record);
         stopRec = findViewById(R.id.btn_stop_record);
         playRec = findViewById(R.id.btn_play_record);
         replayRec = findViewById(R.id.btn_replay);
 
+        //popup
+
+        popupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupMenuExample();
+
+            }
+        });
 
         Button buttonSave = findViewById(R.id.btn_save_note);
 
@@ -175,27 +182,8 @@ public class DescriptionActivity extends AppCompatActivity {
 
 
         }
-        
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                titleName = editTextTitle.getText().toString();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_DENIED) {
-                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                        requestPermissions(permission, CAMERA_REQUEST);
-
-                    } else {
-                        openCamera();
-                    }
-                } else {
-                    openCamera();
-                }
-            }
-        });
 
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -331,6 +319,60 @@ public class DescriptionActivity extends AppCompatActivity {
 
     }
 
+
+//popup_show
+    private void popupMenuExample() {
+        PopupMenu p = new PopupMenu(DescriptionActivity.this, popupButton);
+        p.getMenuInflater().inflate(R.menu.popup_menu, p .getMenu());
+        p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()) {
+                        case R.id.camera:
+                            openCamera();
+                            return true;
+                        case R.id.Gallery:
+                            opengallery();
+                            return true;
+                        case R.id.Reset:
+                         imgReset();
+                            return true;
+                    }
+                Toast.makeText(DescriptionActivity.this,item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        p.show();
+    }
+
+
+
+
+    //popup_actions
+
+
+    public void showMenu(View v)
+    {
+        PopupMenu popup = new PopupMenu(this,v);
+        popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);// to implement on click event on items of menu
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, popup.getMenu());
+        popup.show();
+    }
+
+
+
+
+//opengallery fn
+    public void opengallery(){
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -341,6 +383,17 @@ public class DescriptionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.camera:
+                openCamera();
+                return true;
+            case R.id.Gallery:
+                opengallery();
+                return true;
+            case R.id.Reset:
+             imgReset();
+                return true;
+
+
             case R.id.btn_location:
                 Intent intent = new Intent(DescriptionActivity.this, MapActivity.class);
                 intent.putExtra("latitude", latitude);
@@ -351,7 +404,7 @@ public class DescriptionActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+//camera-fn
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -453,6 +506,46 @@ public class DescriptionActivity extends AppCompatActivity {
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = titleName + timeStamp + ".jpg";
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] b = baos.toByteArray();
+
+                File dir = new File(getExternalCacheDir().getAbsolutePath() + "/notes/");
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+
+                File file = new File(dir.getAbsolutePath() + "/" + imageFileName);
+
+                FileOutputStream fileOuputStream = new FileOutputStream(file);
+                fileOuputStream.write(b);
+                Log.d("TAG", "image path: " + file.getAbsolutePath());
+
+                mCurrentPhotoPath = "file:" + file.getAbsolutePath();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(DescriptionActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        else {
+
+        }
+
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             try {
@@ -483,9 +576,50 @@ public class DescriptionActivity extends AppCompatActivity {
             }
 
         }
+        if (requestCode == RESULT_Reset_IMAGE && resultCode == RESULT_OK && null != data) {
+
+          imgReset();
+
+        }
+        else {
+
+        }
 
     }
+//Reset image
+    public void imgReset(){  try {
 
+        final Bitmap selectedImage = BitmapFactory.decodeResource(getResources(),
+                R.drawable.placeholder);
+        imageView.setImageBitmap(selectedImage);
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = titleName + timeStamp + ".jpg";
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        selectedImage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+
+        File dir = new File(getExternalCacheDir().getAbsolutePath() + "/notes/");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        File file = new File(dir.getAbsolutePath() + "/" + imageFileName);
+
+        FileOutputStream fileOuputStream = new FileOutputStream(file);
+        fileOuputStream.write(b);
+        Log.d("TAG", "image path: " + file.getAbsolutePath());
+
+        mCurrentPhotoPath = "file:" + file.getAbsolutePath();
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+        Toast.makeText(DescriptionActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    }
     private void buildLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -578,6 +712,8 @@ public class DescriptionActivity extends AppCompatActivity {
     }
 
 
-
-
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        return false;
+    }
 }
