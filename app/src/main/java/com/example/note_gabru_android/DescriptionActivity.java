@@ -62,6 +62,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
     ImageView imageView;
     Uri imageUri;
     ImageButton startRec;
+    ImageButton Rec;
     ImageButton stopRec;
     ImageButton playRec, replayRec;
     String mCurrentPhotoPath;
@@ -130,6 +131,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
         popupButton = findViewById(R.id.popup);
         imageView = findViewById(R.id.image_view);
         startRec = findViewById(R.id.btn_start_record);
+        Rec = findViewById(R.id.btn_recording);
         stopRec = findViewById(R.id.btn_stop_record);
         playRec = findViewById(R.id.btn_play_record);
         replayRec = findViewById(R.id.btn_replay);
@@ -170,21 +172,10 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
             latitude = selectednote.getNoteLat();
             longitude = selectednote.getNoteLong();
             nid = selectednote.getId();
-            startRec.setVisibility(View.GONE);
+            startRec.setVisibility(View.VISIBLE);
             playRec.setVisibility(View.VISIBLE);
 
-            if (audiofilepath != null) {
-                playRec.setVisibility(View.VISIBLE);
-                startRec.setVisibility(View.GONE);
-                stopRec.setVisibility(View.GONE);
-                replayRec.setVisibility(View.GONE);
-            } else {
-                startRec.setVisibility(View.VISIBLE);
-                stopRec.setVisibility(View.GONE);
-                replayRec.setVisibility(View.GONE);
-                playRec.setVisibility(View.GONE);
 
-            }
             if (mCurrentPhotoPath != null) {
                 try {
                     mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
@@ -271,8 +262,9 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
+                    Toast.makeText(DescriptionActivity.this,"Recording Started", Toast.LENGTH_SHORT).show();
                     startRec.setVisibility(View.GONE);
+                    Rec.setVisibility(View.VISIBLE);
                     stopRec.setVisibility(View.VISIBLE);
 
                 } else {
@@ -284,8 +276,11 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
         stopRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(DescriptionActivity.this,"Recording Stopped", Toast.LENGTH_SHORT).show();
                 mediaRecorder.stop();
+                startRec.setVisibility(View.VISIBLE);
                 stopRec.setVisibility(View.GONE);
+                Rec.setVisibility(View.GONE);
                 playRec.setVisibility(View.VISIBLE);
             }
         });
@@ -306,6 +301,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                     public void onCompletion(MediaPlayer mp) {
                         playRec.setVisibility(View.GONE);
                         replayRec.setVisibility(View.VISIBLE);
+                        Rec.setVisibility(View.GONE);
 
                     }
                 });
@@ -358,21 +354,6 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
             }
         });
         p.show();
-    }
-
-
-
-
-    //popup_actions
-
-
-    public void showMenu(View v)
-    {
-        PopupMenu popup = new PopupMenu(this,v);
-        popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);// to implement on click event on items of menu
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popup.getMenu());
-        popup.show();
     }
 
 
@@ -601,11 +582,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
         }
 
     }
-    //Keyboard hide
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+
 
 
 //Reset image
