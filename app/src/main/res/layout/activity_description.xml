@@ -84,7 +84,16 @@
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_stop_black_24dp" />
-
+        <ImageButton
+            android:id="@+id/btn_pause_record"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="280dp"
+            android:background="@color/colorAccent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@drawable/pauseblack"
+            />
 
         <ImageButton
             android:id="@+id/btn_play_record"
@@ -96,6 +105,7 @@
             android:visibility="gone"
             android:src="@drawable/ic_play_arrow_black_24dp"
              />
+
 
         <ImageButton
             android:id="@+id/btn_replay"
