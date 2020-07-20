@@ -76,7 +76,7 @@
             android:layout_marginLeft="0dp"
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
-            android:src="@drawable/support" />
+            android:src="@android:drawable/stat_sys_headset" />
         <ImageButton
             android:id="@+id/btn_stop_record"
             android:layout_width="50dp"
@@ -94,7 +94,7 @@
             android:background="@color/colorAccent"
             android:scaleType="fitXY"
             android:visibility="gone"
-            android:src="@android:drawable/ic_media_pause"
+            android:src="@drawable/speaker"
             />
 
         <ImageButton
