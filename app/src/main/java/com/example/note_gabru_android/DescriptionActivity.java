@@ -311,7 +311,7 @@ pauseRec =findViewById(R.id.btn_pause_record);
                 mediaPlayer.start();
             }
         });
-//replay
+//replay btn
         replayRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
