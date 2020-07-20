@@ -64,7 +64,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
     ImageButton startRec;
     ImageButton Rec;
     ImageButton stopRec;
-    ImageButton playRec, replayRec;
+    ImageButton playRec, replayRec,pauseRec;
     String mCurrentPhotoPath;
     Bitmap mImageBitmap;
     double latitude, longitude;
@@ -135,7 +135,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
         stopRec = findViewById(R.id.btn_stop_record);
         playRec = findViewById(R.id.btn_play_record);
         replayRec = findViewById(R.id.btn_replay);
-
+pauseRec =findViewById(R.id.btn_pause_record);
         //popup
 
         popupButton.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +237,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
             }
         });
 
-
+//record
         startRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,7 +272,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                 }
             }
         });
-
+//stop
         stopRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,9 +282,10 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                 stopRec.setVisibility(View.GONE);
                 Rec.setVisibility(View.GONE);
                 playRec.setVisibility(View.VISIBLE);
+                pauseRec.setVisibility(View.GONE);
             }
         });
-
+//play
         playRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -295,10 +296,11 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                pauseRec.setVisibility(View.VISIBLE);
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
+                        pauseRec.setVisibility(View.GONE);
                         playRec.setVisibility(View.GONE);
                         replayRec.setVisibility(View.VISIBLE);
                         Rec.setVisibility(View.GONE);
@@ -309,7 +311,7 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                 mediaPlayer.start();
             }
         });
-
+//replay
         replayRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,13 +323,39 @@ public class DescriptionActivity extends AppCompatActivity implements PopupMenu.
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                pauseRec.setVisibility(View.VISIBLE);
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        pauseRec.setVisibility(View.GONE);
+                        playRec.setVisibility(View.GONE);
+                        replayRec.setVisibility(View.VISIBLE);
+                        Rec.setVisibility(View.GONE);
+
+                    }
+                });
 
                 mediaPlayer.start();
 
             }
         });
+//Pause
+        pauseRec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mediaPlayer = new MediaPlayer();
+
+                pauseRec.setVisibility(View.GONE);
+                playRec.setVisibility(View.GONE);
+                replayRec.setVisibility(View.VISIBLE);
+                Rec.setVisibility(View.GONE);
 
 
+                mediaPlayer.stop();
+
+            }
+        });
     }
 
 
