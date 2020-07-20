@@ -4,12 +4,14 @@
     <item
         android:id="@+id/btn_direction"
         android:title="location"
+        android:visible="false"
         android:icon="@drawable/ic_directions_black_24dp"
 
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/btn_duration"
+        android:visible="false"
         android:title="location"
         android:icon="@drawable/ic_access_time_black_24dp"
         app:showAsAction="ifRoom"

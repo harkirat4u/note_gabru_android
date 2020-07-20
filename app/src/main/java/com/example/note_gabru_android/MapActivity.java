@@ -47,7 +47,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     Marker homeMarker;
-    Marker destMarker;
     public int i;
     private final int REQUEST_CODE = 1;
     // finding the user location
@@ -107,7 +106,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(3000);
-//        locationRequest.setSmallestDisplacement(10);
         setHomeMarker();
     }
     
@@ -122,21 +120,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         dest_lng = intent.getDoubleExtra("longitude", 0);
 
         LatLng noteLatLng = new LatLng(dest_lat, dest_lng);
-        MarkerOptions options = new MarkerOptions().position(noteLatLng).title("your saved loaction")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        ;
-        mMap.addMarker(options);
+//        MarkerOptions options = new MarkerOptions().position(noteLatLng).title("your saved loaction")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//        ;
+//        mMap.addMarker(options);
 
     }
 
-    private void setMarker(Location location) {
-        LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions options = new MarkerOptions().position(userLatLng)
-                .title("Your Destination")
-                .snippet("You are going there")
-                .draggable(true);
-        destMarker = mMap.addMarker(options);
-    }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);

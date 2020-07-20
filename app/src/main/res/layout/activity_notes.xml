@@ -33,6 +33,4 @@
         android:focusable="true"
         android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="@color/colorAccent" />
-
-
 </LinearLayout>

@@ -345,14 +345,13 @@ pauseRec =findViewById(R.id.btn_pause_record);
             public void onClick(View v) {
 
                 mediaPlayer = new MediaPlayer();
-
                 pauseRec.setVisibility(View.GONE);
                 playRec.setVisibility(View.GONE);
                 replayRec.setVisibility(View.VISIBLE);
                 Rec.setVisibility(View.GONE);
 
 
-                mediaPlayer.stop();
+                mediaPlayer.pause();
 
             }
         });
